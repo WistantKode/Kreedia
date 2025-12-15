@@ -1,0 +1,943 @@
+{
+	"info": {
+		"_postman_id": "56db7a71-0dd0-40cf-a3f7-0577cf0a72cc",
+		"name": "Kreedia API Collection",
+		"description": "Complete API collection for testing Kreedia environmental rewards platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25452508"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "NGO Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const responseJson = pm.response.json();",
+									"    if (responseJson.data && responseJson.data.token) {",
+									"        pm.environment.set('ngo_token', responseJson.data.token);",
+									"        pm.environment.set('ngo_user_id', responseJson.data.user.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"ngo@ecogreen.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/ngo/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"ngo",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contributor Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const responseJson = pm.response.json();",
+									"    if (responseJson.data && responseJson.data.token) {",
+									"        pm.environment.set('contributor_token', responseJson.data.token);",
+									"        pm.environment.set('contributor_user_id', responseJson.data.user.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john.doe@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/contributor/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"contributor",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User (NGO)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ngo_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User (Contributor)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ngo_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Update Profile (Contributor)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe Updated\",\n    \"phone\": \"+1111111111\",\n    \"gender\": \"male\",\n    \"wallet_address\": \"0xnewwalletaddress1234567890abcdef1234567890\",\n    \"ens_name\": \"johnupdated.eth\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/user/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password (NGO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ngo_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\": \"password123\",\n    \"new_password\": \"newpassword123\",\n    \"new_password_confirmation\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/user/change-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Stats (Contributor)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Stats (NGO)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ngo_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "File Upload",
+			"item": [
+				{
+					"name": "Upload Single File",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const responseJson = pm.response.json();",
+									"    if (responseJson.file && responseJson.file.url) {",
+									"        pm.environment.set('uploaded_file_url', responseJson.file.url);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "Upload an image file here",
+									"type": "file",
+									"src": "path/to/your/image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Multiple Files",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const responseJson = pm.response.json();",
+									"    if (responseJson.files && responseJson.files.length > 0) {",
+									"        const urls = responseJson.files.map(file => file.url);",
+									"        pm.environment.set('uploaded_files_urls', JSON.stringify(urls));",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files[]",
+									"description": "First image",
+									"type": "file",
+									"src": "path/to/your/image1.jpg"
+								},
+								{
+									"key": "files[]",
+									"description": "Second image",
+									"type": "file",
+									"src": "path/to/your/image2.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"upload"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Missions",
+			"item": [
+				{
+					"name": "Get All Missions (Public)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth-missions?per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"disabled": true
+								},
+								{
+									"key": "latitude",
+									"value": "40.7128",
+									"disabled": true
+								},
+								{
+									"key": "longitude",
+									"value": "-74.0060",
+									"disabled": true
+								},
+								{
+									"key": "radius",
+									"value": "10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Mission (Contributor)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const responseJson = pm.response.json();",
+									"    if (responseJson.data && responseJson.data.id) {",
+									"        pm.environment.set('mission_id', responseJson.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pictures\": [\n        \"https://example.com/dirty-beach1.jpg\",\n        \"https://example.com/dirty-beach2.jpg\",\n        \"https://example.com/dirty-beach3.jpg\"\n    ],\n    \"location\": {\n        \"latitude\": 40.7829,\n        \"longitude\": -73.9654\n    },\n    \"address\": \"Central Park, New York, NY 10024, USA\",\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth-missions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Mission Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth-missions/{{mission_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions",
+								"{{mission_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Missions (Contributor)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth-missions/my-missions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions",
+								"my-missions"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get NGO Missions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ngo_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth-missions/ngo-missions?per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions",
+								"ngo-missions"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "pending",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Mission (Contributor)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Clean Central Park Beach - Updated\",\n    \"description\": \"Updated description: This beautiful beach area in Central Park needs urgent cleaning. There are plastic bottles, food wrappers, cigarette butts, and other debris scattered around.\",\n    \"address\": \"Central Park Reservoir Area, New York, NY 10024, USA\",\n    \"duration\": 10\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth-missions/{{mission_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions",
+								"{{mission_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Mission (NGO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ngo_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reward_amount\": 50,\n    \"reward_currency\": \"USDT\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth-missions/{{mission_id}}/accept",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions",
+								"{{mission_id}}",
+								"accept"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Mission (Contributor)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"clean_pictures\": [\n        \"https://example.com/clean-beach1.jpg\",\n        \"https://example.com/clean-beach2.jpg\",\n        \"https://example.com/clean-beach3.jpg\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth-missions/{{mission_id}}/complete",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions",
+								"{{mission_id}}",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reward Mission (NGO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ngo_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth-missions/{{mission_id}}/reward",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions",
+								"{{mission_id}}",
+								"reward"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Mission (Contributor)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth-missions/{{mission_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth-missions",
+								"{{mission_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get Notifications (Contributor)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications?per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unread Count (Contributor)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/unread-count",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"unread-count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark All Notifications as Read",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{contributor_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/mark-all-read",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"mark-all-read"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "ngo_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "contributor_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "mission_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "ngo_user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "contributor_user_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
